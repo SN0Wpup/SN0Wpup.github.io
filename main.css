@@ -1,0 +1,64 @@
+body::-webkit-scrollbar{
+    display: none;
+}
+body {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+    overflow: scroll;
+    background-color: #2f2f2f;
+}
+div{
+    display: block;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #f0f0f0;
+}
+startWindow{
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    background: #2f2f2f;
+    top:0;
+    left:0;
+    overflow: hidden;
+}
+startwindow > img{
+    position: absolute;
+    display: block;
+    transition: 1s;
+    margin-left: auto;
+    margin-right: auto;
+    animation: imgStr 5s forwards;
+    transform: translate(-50%,-50%);
+    left:50vw;
+    top: 50vh;
+    width: auto;
+    height: auto;
+    filter: blur(0px);
+}
+@keyframes imgStr{
+    0%{filter: blur(0px);}
+    100%{filter: blur(10px);}
+}
+.title{
+    animation: titleStart 5s;
+    animation-fill-mode: forwards;  
+    position: absolute;
+    top:50vh;
+    left:50%;
+    transform: translate(-50%, -50%); 
+    font-family: Arial, Helvetica, sans-serif;
+    color: #f0f0f0;
+    font-size: xxx-large;
+}
+@keyframes titleStart{
+    0%{color: #2f2f2f00;}
+    100%{color: #f0f0f0;}
+}
+.divider{
+    position:absolute;
+    top:100vh;
+    left: 0%;
+    width: 100%;
+    height: 10vw;
+    background-color: #f0f0f0;
+}
