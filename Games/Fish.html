@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fishing</title>
+  <style>
+html, body {margin: 0; height: 100%; overflow: hidden}
+body {
+  margin:0;
+  background:  rgba(40,40,40,1);
+}
+
+.flex { /*Flexbox for containers*/
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.waves {
+  position:absolute;
+  width: 100%;
+  height:15vh;
+  bottom: 0.1%;
+  margin-bottom:-7px; /*Fix for safari gap*/
+  min-height:100px;
+  max-height:150px;
+  overflow-y: hidden;
+  z-index: 0;
+}
+
+
+/* Animation */
+.parallax > use:hover{
+  transition: 1s;
+  fill:rgba(4, 134, 177, 0.67) ;
+}
+.parallax > use {
+  transition: 1s;
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+@keyframes move-forever {
+  0% {
+   transform: translate(-90px,0);
+  }
+  100% { 
+    transform: translate(85px,0);
+  }
+}
+  .circle {
+    transition: all 1s cubic-bezier(0.48, 0.49, 0.61, 1.02) 0s;
+    position: absolute;
+    border-radius: 50%;
+    width: 5%;
+    aspect-ratio: 1;
+    left: 50%;
+    top: 0;
+	visibility: hidden;
+	z-index: 1;
+  }
+  .score{
+    -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+    top:1%;
+    left: 1%;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 60%;
+    height: 15%;
+    position: absolute;
+    font-size: 300%;
+    color: rgb(230, 230, 230);
+  }
+  .fish{
+    transition: all 0.7s cubic-bezier(0.48, 0.49, 0.61, 1.02) 0s;
+    fill:aqua;
+    position:absolute;
+    top:100%;
+    left:0px;
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+    visibility: hidden;
+  }
+  .star{
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.0);
+    border-radius: 50%;
+    width: 2%;
+    filter: blur(10px);
+    aspect-ratio: 1;
+    left: 50%;
+    top: 50%;
+	z-index: -1;
+    transition: 1s;
+  }
+  .Circle2{
+	position:absolute;
+	width:100%;
+	height: 100%;
+	visibility: visible;
+    animation: bob 5s infinite;
+	z-index: 2;
+  }
+  @keyframes bob{
+	0%{transform: translate(0px,3%)}
+	50%{transform: translate(0px,-3%)}
+	100%{transform: translate(0px,3%)}
+  }
+  </style>
+  <script>
+	start = false;
+	class bobber {
+	  constructor(x, y) {
+		this.x = x;
+		this.y = y;
+		this.cast = false;
+	  }
+	}
+
+	Bobber = new bobber(10,10);
+	var xPos = 0,yPos = 0;
+	var time = -1;
+	var resistanceToBeat = 0;
+	var resistanceCount = 0;
+	window.addEventListener('mousemove', function(event){
+		xPos = event.clientX;
+		yPos = event.clientY;
+    var line = document.getElementById('Line');
+    line.setAttribute("x1",xPos);
+    line.setAttribute("y1",yPos);
+	});
+	var i = 0;
+  var lin = 0;
+  window.setInterval(function(){
+	if(start){
+    var circle = document.getElementById('circle');
+    var line = document.getElementById('Line');
+
+
+		/*MAIN LOGIC LOOP*/
+		if(i==time&&i!=0){
+      circle.style.background = "lightblue";
+    }
+    if(i>=time && i<=time+250){
+      if(i%2==0){
+        circle.style.transform = "translate(100px,0px)";
+        lin += 100;
+      }
+      if(i%2!=0){
+        circle.style.transform = "translate(-100px,0px)";
+        lin -= lin;
+      }
+      
+    }else { circle.style.transform = "translate("+lin+"px,0px)";
+    lin = 0;  
+    line.setAttribute("x2",parseInt(circle.style.left)
+	+ window.innerHeight*0.05);
+    line.setAttribute("y2",parseInt(circle.style.top)+ window.innerHeight*0.05);
+  }
+    if(i>time+250&&Bobber.cast)
+      circle.style.background = "rgb(100,0,0)";
+	i += 1;
+    
+	if(time==0)
+          i = 0;
+		}
+	}, 10);
+  var score = 0;
+  document.addEventListener("click", function(event) {
+      start = true;
+      if(!Bobber.cast&&i>=0){
+        i = 0;
+        var circle = document.getElementById('circle')
+        circle.style.transition = "all 0.7s cubic-bezier(0.48, 0.49, 0.61, 1.02) 0s";
+        Bobber.cast = true;
+        setTimeout(() => {//make line visible after bobber is in water
+          var line = document.getElementById('Line');
+          if(Bobber.cast)
+          line.style.visibility = "visible";
+        }, 700);
+
+        circle.style.visibility = "visible";
+        circle.style.background = "#fa4";
+        Bobber.y = window.innerHeight-window.innerHeight*0.15;
+        Bobber.x = event.clientX; 
+        circle.style.left = Bobber.x  +'px';
+        circle.style.top = Bobber.y + 'px';
+        var fish = document.getElementById('fish');
+        fish.style.transition = "0s";
+        fish.style.visibility = "hidden";
+        fish.style.fill = "rgb("+Math.random()*255+","+Math.random()*255+","+Math.random()*255+")";
+        fish.style.transform = "rotate("+Math.random()*180+"deg)"
+        time = i + Math.round(Math.random()+1*1000);
+		resistanceToBeat = Math.round(Math.random()*10 + 1);
+      }else if(Bobber.cast){
+		if(resistanceCount>=resistanceToBeat || !(i>=time && i<=time+250)){
+			i-=Math.random()*100;
+			var circle = document.getElementById('circle')
+			var line = document.getElementById('Line');
+			Bobber.cast = false;
+			circle.style.visibility = "hidden";
+			line.style.visibility = "hidden";
+			circle.style.background = "#28282800";
+			Bobber.x = event.clientX; 
+			Bobber.y = 100;
+			circle.style.left = Bobber.x  +'px';
+			circle.style.top = Bobber.y + 'px';
+			if(i>=time && i<=time+250){
+				resistanceCount += 1;
+				resistanceCount = 0;
+				resistanceToBeat = 0;
+				//Caught fish
+				score += 1;
+				var scoreDiv = document.getElementById('score');
+				scoreDiv.textContent = 'Fish: ' + score;
+				var fish = document.getElementById('fish');
+				var star = document.createElement("div");
+				star.classList.add("star");
+				star.style.left = Math.random()*window.innerWidth + 'px';
+				star.style.top = Math.random()*window.innerHeight + 'px';
+				star.style.backgroundColor = (fish.style.fill).replace(')',','+Math.random()*255+')').replace('rgb','rgba');
+				star.style.filter= "blur("+((Math.random()*10)+2)+"px)";
+				star.style.width = Math.random()*3 + '%';
+				document.body.appendChild(star);
+				fish.style.transition = "all 0.7s cubic-bezier(0.48, 0.49, 0.61, 1.02) 0s";
+				fish.style.visibility = "visible";
+				fish.style.fill = "#28282800";
+				i = -100;
+			}
+				time = 0;
+	
+
+		}
+
+      }
+    })
+  </script>
+</head>
+<body>
+  <div class="score" id = 'score'>Fish: 0</div>
+  <div class="Circle2" id='circle2'>
+	
+	  <div class="circle" id='circle'>
+	  
+		<svg class = "fish" id='fish' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+		  <path d="M327.1 96c-89.97 0-168.54 54.77-212.27 101.63L27.5 131.58c-12.13-9.18-30.24.6-27.14 14.66L24.54 256 .35 365.77c-3.1 14.06 15.01 23.83 27.14 14.66l87.33-66.05C158.55 361.23 237.13 416 327.1 416 464.56 416 576 288 576 256S464.56 96 327.1 96zm87.43 184c-13.25 0-24-10.75-24-24 0-13.26 10.75-24 24-24 13.26 0 24 10.74 24 24 0 13.25-10.75 24-24 24z"/>
+		</svg>
+	  </div>
+	</div>
+  <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+  viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+  <defs>
+    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+  </defs>
+  
+  <g class="parallax">
+    <use xlink:href="#gentle-wave" x="48" y="0" fill="#002582b3" />
+    <use xlink:href="#gentle-wave" x="48" y="3" fill="#166ad880" />
+    <use xlink:href="#gentle-wave" x="48" y="5" fill="#0024db4d" />
+    <use xlink:href="#gentle-wave" x="48" y="7" fill="#0d4cd5" />
+  </g>
+</svg>
+	<svg class = "line" transition= 0.0s position="absolute" width="100%" height="100%" >
+	  <line visibility = "hidden" transition = 1.0s id = 'Line' x1="0" y1="0" x2="0" y2="0" stroke="black"/>
+	</svg>
+
+
+</body>
+</html>
