@@ -22,9 +22,14 @@ startWindow{
     overflow: hidden;
 }
 startwindow > img{
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
     position: absolute;
     display: block;
-    transition: 1s;
+    transition: 0.1s;
     margin-left: auto;
     margin-right: auto;
     animation: imgStr 5s forwards;
@@ -34,6 +39,8 @@ startwindow > img{
     width: auto;
     height: auto;
     filter: blur(0px);
+    min-width: 100%;
+    min-height: 100%;
 }
 @keyframes imgStr{
     0%{filter: blur(0px);}
@@ -54,11 +61,121 @@ startwindow > img{
     0%{color: #2f2f2f00;}
     100%{color: #f0f0f0;}
 }
-.divider{
-    position:absolute;
-    top:100vh;
-    left: 0%;
+.Btn{
+    border-radius: 10px;
+    display: inline-block;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 150px;
+    height: 100px;
+    background-color: #0081b9;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+    text-align: center;
+}
+.Btn > span{
+    text-align: center;
+    vertical-align: middle;
+    line-height: 10vh;       /* The same as your div height */
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 100%;
+    z-index: 1;
+    top:-100px;
+    position: relative;
+}
+.waves {
+    position:initial;
+    top:0;
+    left:0%;
     width: 100%;
-    height: 10vw;
-    background-color: #f0f0f0;
+    height:100%;
+    bottom: 0.1%;
+    margin-bottom:-7px; /*Fix for safari gap*/
+  }
+  /* Animation */
+  .parallax > use {
+    transition: 1s;
+    animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+  }
+  .parallax > use:nth-child(1) {
+    animation-delay: -2s;
+    animation-duration: 7s;
+  }
+  .parallax > use:nth-child(2) {
+    animation-delay: -3s;
+    animation-duration: 10s;
+  }
+  .parallax > use:nth-child(3) {
+    animation-delay: -4s;
+    animation-duration: 13s;
+  }
+  .parallax > use:nth-child(4) {
+    animation-delay: -5s;
+    animation-duration: 20s;
+  }
+  @keyframes move-forever {
+    0% {
+     transform: translate(-90px,0);
+    }
+    100% { 
+      transform: translate(85px,0);
+    }
+  }
+
+ul {
+    font-family: Arial, Helvetica, sans-serif;
+    top:0;
+    left:0;
+    position: fixed;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #4a4a4a;
+    visibility: visible;
+    width:100%;
+    z-index: 5;
+}
+
+li {
+float: left;
+}
+
+li a {
+display: block;
+color: white;
+text-align: center;
+padding: 14px 16px;
+text-decoration: none;
+}
+.selected{
+    background-color: #9159e3;
+}
+
+li a:hover {
+background-color: #7259e3;
+
+}
+.dropdown {
+    position: relative;
+    display: inline-block;
+    width: fit-content;
+  }
+.dropdown-content {
+    display: none;
+    position: fixed;
+    background-color: #5d5d5d;
+    width: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.dropdown-content a:hover {background-color: #878787}
+.dropdown-content a {
+    color: #f0f0f0;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+.dropdown:hover .dropdown-content {
+    display: block;
 }
