@@ -6,17 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8" />
     <link rel="stylesheet" type="text/css" href="main.css" /> 
+    <link rel="stylesheet" type="text/css" href="navBar.css" /> 
+
     <title>Home</title>
+    <script src="main.js"></script>
 </head>
 <body>
     <!--nav bar-->
-    <ul>
-        <li><a href="main.html" class="selected">Home</a></li>
+    <ul id='navBar'>
+        <li><a class="selected">Home</a></li>
         <li class = "dropdown"><a>Games</a>
             <div class = "dropdown-content">
                 <a href="Games/Fish.html">Fish</a>
             </div>
         </li>
+        <li ><a href="./Shaders/Fractals.html">Fractals</a></li>
+        <a class="pfp"></a>
     </ul>
     <startWindow>
         <img src="untitled.png">
@@ -25,9 +30,9 @@
         </div>
     </startWindow>
     <div style="position:absolute; top: 100vh;width: 100%;height: 100%;left:0px;margin:10px;" >
-        <a class = "Btn"  href="Games/Fish.html">
+        <a class = "Btn" id="waveBtn"  href="javascript:waveThing('./Games/Fish.html');">
             <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-            viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+            viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto" >
             <defs>
                 <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
             </defs>
