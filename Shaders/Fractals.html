@@ -1,12 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <header>WIP</header>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <title>Fractals</title>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js"
+      integrity="sha512-zhHQR0/H5SEBL3Wn6yYSaTTZej12z0hVZKOv3TwCUXT1z5qeqGcXJLLrbERYRScEDDpYIJhPC1fk31gqR783iQ=="
+      crossorigin="anonymous"
+      defer
+    ></script>
+    <link rel="stylesheet" type="text/css" href="../navBar.css" /> 
+    <script src="Fractals.js" defer></script>
+
+  </head>
+
+  <body>
+    <!--nav bar-->
+    <div style="height: 40px;margin: 0px;width: 100%;"></div>
+    <ul>
+        <li><a href="../main.html">Home</a></li>
+        <li class = "dropdown"><a>Games</a>
+            <div class = "dropdown-content">
+                <a href="../Games/Fish.html">Fish</a>
+            </div>
+        </li>
+
+        <a class="pfp"></a>
+    </ul>
+    <canvas id="glcanvas" width="1280" height="720" style="position: absolute;top:40px;left:0px;"></canvas>
+    <script>  
+      const canvas = document.querySelector("#glcanvas");
+      canvas.height = window.innerHeight-40;
+      canvas.width = window.innerWidth;</script>
+  </body>
 </html>
