@@ -24,13 +24,20 @@
                 <a href="../Games/Fish.html">Fish</a>
             </div>
         </li>
-
+        <li class = "selected"><a>Fractals</a></li>
         <a class="pfp"></a>
     </ul>
     <canvas id="glcanvas" width="1280" height="720" style="position: absolute;top:40px;left:0px;"></canvas>
     <script>  
       const canvas = document.querySelector("#glcanvas");
       canvas.height = window.innerHeight-40;
-      canvas.width = window.innerWidth;</script>
+      canvas.width = window.innerWidth;
+      addEventListener("resize", (event) => {
+        const canvas = document.querySelector("#glcanvas");
+        canvas.height = window.innerHeight-40;
+        canvas.width = window.innerWidth;
+      });
+    </script>
+      
   </body>
 </html>

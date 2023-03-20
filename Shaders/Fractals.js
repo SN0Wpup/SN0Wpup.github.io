@@ -1,5 +1,33 @@
+const t = [1.0,1.0];
+const mv = [0.0,0.0];
+canvas.addEventListener('contextmenu', (evt)=> {
+  t[0]*=1.2;
+  t[1]*=1.2;
+  evt.preventDefault();
+});
+addEventListener('click',(event)=>{
+    t[0]= t[0]/1.2;
+    t[1]= t[1]/1.2;
+})
+/*addEventListener('mousemove', (event)=>{
+  mv[0] = -(event.clientX-(window.innerWidth*0.5))/window.innerWidth;
+  mv[1] = (event.clientY-(window.innerHeight*0.5))/window.innerHeight;
+  mv[0] *= t[0];
+  mv[1] *= t[1];
+})*/
+addEventListener('keydown', function(event) {
+  const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
+  if(key == "ArrowRight")
+    mv[0] += -0.4*t[0];
+  else if(key == "ArrowLeft")
+    mv[0] += 0.4*t[0];
+  if(key == "ArrowUp")
+    mv[1] += -0.4*t[1];
+  else if(key == "ArrowDown")
+    mv[1] += 0.4*t[1];
+  console.log();
+});
 main();
-
 //
 // start here
 //
@@ -23,11 +51,13 @@ function main() {
   // Vertex shader program
   const vsSource = `
     attribute vec4 aVertexPosition;
+    uniform vec2 zoom;
+    uniform vec2 move;
     varying mediump vec2 textCoord;
     
     void main() {
       gl_Position = aVertexPosition;
-      textCoord = aVertexPosition.xy;
+      textCoord = -aVertexPosition.xy * zoom + move;
     }
 `;
 
@@ -41,7 +71,7 @@ function main() {
       float zx = coord.x;
       float zy = coord.y;
       float iteration = 0.0;
-      const float maxIteration = 256.0;
+      const float maxIteration = 1024.0;
       for (int i = 0; i<int(maxIteration);i++){
           float xtemp = zx*zx - zy*zy + x;
           zy = abs(2.0*zx*zy) + y;
@@ -69,6 +99,13 @@ function main() {
     attribLocations: {
       vertexPosition: gl.getAttribLocation(shaderProgram, "aVertexPosition"),
     },
+    uniformLocations: {
+      Zoom: gl.getUniformLocation(
+        shaderProgram,
+        "zoom"
+      ),
+      Move: gl.getUniformLocation(shaderProgram,"move"),
+    },
   };
 
   // Here's where we call the routine that builds all the
@@ -78,12 +115,12 @@ function main() {
   // Draw the scene
   //while(true){
     drawScene(gl, programInfo, buffers);
-    //1fps
+    //10fps
     setInterval(() => {
       
       drawScene(gl, programInfo, buffers);
       
-    }, 1000);
+    }, 100);
   
   //}
 }
@@ -144,8 +181,11 @@ function loadShader(gl, type, source) {
   return shader;
 }
 function drawScene(gl, programInfo, buffers) {
+  const canvas = document.querySelector("#glcanvas");
+  canvas.height = window.innerHeight-40;
+  canvas.width = window.innerWidth;
   gl.clearColor(0.0, 0.0, 0.0, 1.0); // Clear to black, fully opaque
-  gl.clearDepth(1.0); // Clear everything
+  //gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
   gl.depthFunc(gl.LEQUAL); // Near things obscure far things
 
@@ -161,6 +201,14 @@ function drawScene(gl, programInfo, buffers) {
   // Tell WebGL to use our program when drawing
   gl.useProgram(programInfo.program);
   // Set the shader uniforms
+  gl.uniform2fv(
+    programInfo.uniformLocations.Zoom,
+    t
+  );
+  gl.uniform2fv(
+    programInfo.uniformLocations.Move,
+    mv
+  )
   {
     const offset = 0;
     const vertexCount = 4;
