@@ -11,15 +11,15 @@
     ></script>
     <link rel="stylesheet" type="text/css" href="../navBar.css" /> 
     <script src="Fractals.js" defer></script>
-
+    <link rel="stylesheet" type="text/css" href="./Fractals.css" /> 
   </head>
 
-  <body>
+  <body style="overflow: hidden;">
     <!--nav bar-->
     <div style="height: 40px;margin: 0px;width: 100%;"></div>
     <ul>
         <li><a href="../main.html">Home</a></li>
-        <li class = "dropdown"><a>Games</a>
+        <li class = "dropdown" onclick=""><a>Games</a>
             <div class = "dropdown-content">
                 <a href="../Games/Fish.html">Fish</a>
             </div>
@@ -27,7 +27,7 @@
         <li class = "selected"><a>Fractals</a></li>
         <a class="pfp"></a>
     </ul>
-    <canvas id="glcanvas" width="1280" height="720" style="position: absolute;top:40px;left:0px;"></canvas>
+    <canvas id="glcanvas" width="0" height="0" style="position: absolute;top:40px;left:0px;"></canvas>
     <script>  
       const canvas = document.querySelector("#glcanvas");
       canvas.height = window.innerHeight-40;
@@ -38,6 +38,22 @@
         canvas.width = window.innerWidth;
       });
     </script>
+  <div class="sticky">
+    <div class="content">
+      <div> Zoom <br><input type="range" min="1" max="2000000" value="1000000" class="slider" id='zoom'></div>
+    </div>
+  </div>
+  <div class="sticky" style="top: 140px;">
+    <div class="content">
+      RGB
+      <br>
       
+      <div style="text-align: right;"> 
+      <div> Red   <input type="range" min="0" max="256" value="20.48" class="slider" id='Red'></div>
+      <div> Green <input type="range" min="0" max="256" value="10.24" class="slider" id='Green'></div>
+      <div> Blue  <input type="range" min="0" max="256" value="81.92" class="slider" id='Blue'></div>
+  </div>
+</div>
+
   </body>
 </html>

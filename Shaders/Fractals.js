@@ -1,20 +1,22 @@
-const t = [1.0,1.0];
-const mv = [0.0,0.0];
+var t = [1.0,1.0];
+var mv = [0.0,0.0];
+var usrClr = [0.04,0.02,0.16];
 canvas.addEventListener('contextmenu', (evt)=> {
-  t[0]*=1.2;
-  t[1]*=1.2;
-  evt.preventDefault();
+  if(!evt.shiftKey){
+    t[0]*=1.2;
+    t[1]*=1.2;
+    evt.preventDefault();
+    document.getElementById('zoom').value = t[0]*1000000;
+  }
 });
 addEventListener('click',(event)=>{
+    if(event.target==document.getElementById('glcanvas')){
+      event.preventDefault();
     t[0]= t[0]/1.2;
     t[1]= t[1]/1.2;
+    document.getElementById('zoom').value = t[0]*1000000;
+    }
 })
-/*addEventListener('mousemove', (event)=>{
-  mv[0] = -(event.clientX-(window.innerWidth*0.5))/window.innerWidth;
-  mv[1] = (event.clientY-(window.innerHeight*0.5))/window.innerHeight;
-  mv[0] *= t[0];
-  mv[1] *= t[1];
-})*/
 addEventListener('keydown', function(event) {
   const key = event.key; // "ArrowRight", "ArrowLeft", "ArrowUp", or "ArrowDown"
   if(key == "ArrowRight")
@@ -25,8 +27,19 @@ addEventListener('keydown', function(event) {
     mv[1] += -0.4*t[1];
   else if(key == "ArrowDown")
     mv[1] += 0.4*t[1];
-  console.log();
+
 });
+document.getElementById('zoom').oninput = function() {
+  t = [this.value/1000000,this.value/1000000];
+}
+document.getElementById('Red').oninput = function(){
+  usrClr[0] = this.value/512;
+}
+document.getElementById('Green').oninput = function(){
+  usrClr[1] = this.value/512;
+}
+document.getElementById('Blue').oninput = function(){
+  usrClr[2] = this.value/512;}
 main();
 //
 // start here
@@ -53,17 +66,20 @@ function main() {
     attribute vec4 aVertexPosition;
     uniform vec2 zoom;
     uniform vec2 move;
-    varying mediump vec2 textCoord;
-    
+    uniform lowp vec3 colourIn;
+    varying highp  vec2 textCoord;
+    varying lowp vec3 colour;
     void main() {
       gl_Position = aVertexPosition;
       textCoord = -aVertexPosition.xy * zoom + move;
+      colour = colourIn;
     }
 `;
 
   const fsSource = `
-    precision mediump float;
-    varying mediump vec2 textCoord;
+    precision highp float;
+    varying highp vec2 textCoord;
+    varying lowp vec3 colour;
     void main() {
       lowp vec2 coord = textCoord.xy;
       float x = textCoord.x;
@@ -71,14 +87,15 @@ function main() {
       float zx = coord.x;
       float zy = coord.y;
       float iteration = 0.0;
-      const float maxIteration = 1024.0;
+      const float maxIteration = 1.0*256.0;
       for (int i = 0; i<int(maxIteration);i++){
           float xtemp = zx*zx - zy*zy + x;
           zy = abs(2.0*zx*zy) + y;
           zx = xtemp;
           iteration += 1.0;   
           if (zx*zx + zy*zy < 16.0)
-          gl_FragColor = vec4(0.2*iteration,0.1*iteration,0.8*iteration,1.0);
+          //0.04,0.02,0.16
+          gl_FragColor = vec4(colour.x*iteration,colour.y*iteration,colour.z*iteration,1.0);
           if(iteration > maxIteration ||zx*zx + zy*zy > 16.0 )
             break;
       }
@@ -105,6 +122,7 @@ function main() {
         "zoom"
       ),
       Move: gl.getUniformLocation(shaderProgram,"move"),
+      Colour: gl.getUniformLocation(shaderProgram,"colourIn"),
     },
   };
 
@@ -208,6 +226,10 @@ function drawScene(gl, programInfo, buffers) {
   gl.uniform2fv(
     programInfo.uniformLocations.Move,
     mv
+  )
+  gl.uniform3fv(
+    programInfo.uniformLocations.Colour,
+    usrClr
   )
   {
     const offset = 0;

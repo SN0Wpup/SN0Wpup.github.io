@@ -1,0 +1,18 @@
+.sticky{
+    position: absolute;
+    /*aspect-ratio: 100/80;*/
+    min-width: 100px;
+    min-height: 80px;
+    background-color: #2b2b2b;
+    color: #f0f0f0;
+    border-radius: 10px;
+    margin: 5px;
+}
+.slider{
+    transition: 1s;
+    
+}
+.content{
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 5px;
+}
